@@ -1,0 +1,144 @@
+GDEngine Version 3, A Fast XNA SceneGraph Sprite Engine
+by Luiz Fernando
+
+- Current Version -
+     * 1.0.3 *
+
+
+- Change Log -
+
+* = Fix/Change
++ = Addition
+- = Subtraction
+. = Note
+
+== 1.0.3
+
+* Now setting the tint and alpha properties of an entity will not mark the entity as dirty
+* Fixed another bug with incorrect local size calculations on GDText, GDAnimation and GDImage entity types
+
+== 1.0.0
+
++ Added a GDEntity.Raycast() method used to raycast through the DisplayList of an entity
++ Added a Name identifier for the GDAnimStorageItem, GDContentItem and GDSoundStorageItem classes
++ Added a Name constructor for the GDEntity class
++ Added method GDEntity.EntityNamed() to search the display tree recursively for an entity with the given name
++ Added GDMath.Distance(Vector2, Vector2) overload
++ Added a specialized GDMath.GetBoundingBox() and GDMath.GetRectangleArea() for 2 points only for speedup
++ Added GDScreen.DesiredSpriteSortMode, GDScreen.DesiredDepthStencilState, and GDScreen.DesiredRasterizerState fields
++ Added GDEntity.MaskRectangle field and GDEntity.maskRectangle property
++ Added a screen clipping feature to the engine's entity drawing process
++ Added GDStatics.Intersection() method that returns the intersection of the two given RectangleF objects
++ Added AnimationDescriptor.PlaybackRate field, used to set the rate at which the playback is set. Accepted value ranges must lie between [0 - 1] inclusive
++ Added GDAnimation.CreateEmptyDescriptor() method for generation of empty descriptors
+
+* Now the FrameBoundCollection is composed of four integers (now incorporating width and height) instead of two
+* Now the FrameBoundCollection contains X and Y offsets to be used when calculating the drawing regtion of the frame
+* Now GDMath.GetBoundingBox() works with all points array sizes other than 2 and 4
+* Now GDEntity.GetArea() has a flag that specifies if it should call RefreshArea() and ApplyMatrixRecursive() if the entity is marked dirty
+* Fixed an incorrect bounding box calculation on GDEntity.QuerySegment() that would reduce performance on some cases, and in others not work as expected at all
+* Changed the GDEntity.RefreshArea() method to not alter the GDEntity.OriginalWidth and GDEntity.OriginalHeight properties
+* Fixed incorrect local size calculations on GDText, GDAnimation and GDImage entity types
+* Fixed the rounding behavior on GDAnimation and GDImage entities
+* Implemented a GDText.CalculateArea() override and removed the GDText.RefreshArea() override to avoid incorrect size calculations
+* Removed the reduntant array copy in the GDEntity.End() method
+* Now the GDEntity.Update() method checks if a child entity is parented by it before calling the child's Update() method
+* Now the GDEntity.alpha property is a separated floating point value. It may fix some errors with precision that may have been happening before
+* Fixed a bug on GDEntity.HitTest() that would not correctly report collisions under some circumstances
+
+
+. Removed two needless RectangleF.Clone() calls from GDEntity.QueryEntity()
+. Removed a needless GDMath.GetBoundingBox() call from GDEntity.QueryRec()
+. Moved the GDEntity.Unscaled member initialization to the GDEntity.Init() method
+. Now the default SpriteSortMode for screens is Immediate
+
+== 0.8.5b:
+
++ Added a LocalArea system to the GDEntity class. It can be used to get the true width and height of the entity based on the transformations of the children entities.
+
++ Added GDEntity.CalculateArea() that will be called from GDEntity.RefreshArea() and replace the inlined area calculation method
++ Added methods GDEntity.GetLocalArea() and GDEntity.GetLocalPoints()
++ Added function GDMath.TransformPoints that transforms a set of points with the given transformation parameters
+
+* Fixed a bug on the GDAnimation.RefreshArea() (now GDAnimation.CalculateArea()) that would not properly flag the entity as having a valid area
+* Now the GDEntity.OriginalWidth and GDEntity.OriginalHeight reflect the entity's LocalArea size
+
+. Changed the code on GDentity.ApplyMatrixRecursive() to have less ifs
+. Now the GDDisplayLinkedList and GDDisplayLinkedListLink classes share the same file
+. Updated the GDEntity.OriginalWidth and GDEntity.OriginalHeight XML documentation comments to reflect the recent changes in the Area and size calculation
+
+== 0.7.5b:
+
++ Added the GDAnimStorage.GetAllItems(), GDSoundStorage.GetAllItems() and GDContent.GetAllItems() to get all currently stored items
++ Added two new functions for the AnimationDescriptor object used to control animation flow with one function call: GotoAndPlay and GotoAndStop
++ Added a new enum DescOptions for the GDAnimation that can be used as a new optional parameter to the GDAnimation.CreateDescriptor() function
+
++ Added a set of optional DescOptions for the GDAnimation.CreateDescriptor function that allows modificiations on the descriptor creation time.
+  . Using DescOptions.Flip flips the frame orders making the animation play backwards from original frame orders
+
+* Fixed a bug with the GDEntity.Query* functions and invalid collision points
+* Now the GDentity.GetArea() calls GDEntity.RefreshArea() if the area is dirty before returning it
+* Now the GDEntity.HasArea flag is correctly updated when resetting the area on GDEntity.RefreshArea()
+* Now the GDImage and GDAnimation correctly unify the Area and the CollisionRecMod rectangles
+
+. Added more XML commentaries to the code
+
+== 0.7.0b:
+
++ RectangleF now supports the multiplication ('*') and division ('/') operators with floating point numbers
++ Added GDEntity.originalSize member, which returns a vector corresponding to the OriginalWidth and OriginalHeight of the entity
+
+* Removed a redundance in a few collision detection routines from GDEntity where the methods were recalculating the collision box when one was already stored as an entity property.
+* Removed test inside GDMath.Distance(GDEntity, GDEntity) that checked whether the two entities were children of the same parent entity
+* Fixed a small issue where a GDAnimation would ignore the ForceFree parameter in GDAnimation.Free(bool forceFree) causing unwanted disposal
+* Fixed a problem where the GDAnimation would not call the FrameAdvance event properly when the animation looped
+* Fixed an issue with the RefreshCollision() method using relative scales instead of absolute when recalculating the collision boxes
+* Now the engine calls the GDEngine.ApplyMatrixRecursive() on the Root node in the Update() method as well as the Render(). Should fix some issues with initial collision detection.
+
+== 0.6.1b:
+
++ Added a new querying method: QueryEntity. It's hella slow for now, so use with care
++ Now only entities with valid areas affect their parent entities' areas. See GDEntity.HasArea
++ Now the entities will not render if they are outside the clipping rectangle passed as the redrawRect parameter to the GDEntity.Draw method
++ Now the entities will not render if the alpha property is set to 0
++ Added a tint property to the GDEntity class, and it will be used to tint all the nested child entities and itself when rendering, as well as an alpha property
++ Added the ability to play animations backwards with the GDAnimation, by using the flag AnimationDescriptor.Reversed in the Descriptor property of the GDAnimation instance
++ Added a new property to the GDEntity to support custom user made data called UserData
++ Added a new property to the GDEntity called ChildIndex, it tells at which index the entity is in the parent's Children list, or -1 if there's no parent
++ Added a new virtual method called sortChildren, that sorts all children's ChildIndexes
++ Added two methods for spatial querying of entities to go with GetAtPoint: QueryRec and QuerySegment
++ Added PointInPolygon function to the GDMath class. It tests whether a point is inside a polygon
++ The GDAnimation now has a constructor overload that supports an AnimationDescriptor to be set right away
+
+* Now entities force new entities being added to their display list to recurse their matrices with ApplyMatrixRecursive() on the addChild call
+* Removed some reduntant drawing code that extracted already calculated properties from the absoluteTransform matrix on GDImage, GDText and GDAnimation
+* Greatly sped up the disposing process when using GDMainEngine.Dispose()
+* Fixed a serious issue with the GDEntity.GetAtPoint and GDEntity.QueryRec functions, where they wouldn't work properly with rectangles and points with negative coordinates
+* Fixed an issue where the GDMainEngine would try to make function calls on a nullified GDScreen object
+* Fixed GDText not computing the text width and height correctly when scaled
+* Fixed problems with entity deinitialization with Screen.UnloadContent(), MainEngine.UnloadContent(), GDEntity.Free() and GDEntity.End() methods
+* Fixed issues with animation loading methods for the GDAnimation class
+* Now the GDImage and GDAnimation classes correctly round the origin when the RoundPoints flag is set to true
+
+. Virtualized the GDEntity's following methods: addChild, removeChild and the removeChild overload
+. Made the GDEntity.RefreshArea method public
+
+== 0.3.5b:
+
++ Now the GDMath's PolygonCollision function can also resolve collisions
++ New GDText entity, used to display text onscreen using the SpriteBatch's DrawString function
++ Now the Camera System is up and running. Use the Camera object located at the GDMainEngine class to modify the view
++ Now the GetAtPoint and HitTest functions support bitmask filtering
+
+* The GDMath's PolygonCollision function works a little bit faster now
+* Updated the way the bounding box and collision box is calculated
+* Updated the GDAnimation's AnimationDescriptor to support == and != operators
+* Fixed a problem with the way GDAnimation advanced the frames, which could cause a faster-than-intended animation playing
+
+. Many minor bug fixes and stabillity issues covered
+
+== 0.3.0b:
+
+* Now GDAnimations won't try to render an animation if no animation is loaded
+* Changed the way the GDEntity class checks for children on GetAtPoint method. Should make things faster.
+. Initial version
