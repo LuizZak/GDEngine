@@ -78,6 +78,10 @@
     <Compile Include="Display\GDAnimation.cs" />
     <Compile Include="Display\GDCamera.cs" />
     <Compile Include="Display\GDText.cs" />
+    <Compile Include="Event\DefaultEventHandler.cs" />
+    <Compile Include="Event\Event.cs" />
+    <Compile Include="Event\IEventHandler.cs" />
+    <Compile Include="Event\IEventReceiver.cs" />
     <Compile Include="GDMainEngine.cs" />
     <Compile Include="GDEntity.cs" />
     <Compile Include="Display\GDImage.cs" />
@@ -94,6 +98,7 @@
     <Compile Include="Utils\RectangleF.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

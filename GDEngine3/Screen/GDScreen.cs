@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using GDEngine3.Event;
 using GDEngine3.Utils;
 
 namespace GDEngine3.Screen
@@ -24,6 +25,8 @@ namespace GDEngine3.Screen
             Root = new GDEntity();
             Root.isRoot = true;
             Root.Engine = MainEngine;
+
+            eventHandler = new GDDefaultEventHandler();
         }
 
         /// <summary>
@@ -31,6 +34,7 @@ namespace GDEngine3.Screen
         /// </summary>
         public virtual void End()
         {
+            eventHandler.Clear();
             UnloadContent();
             MainEngine = null;
         }
@@ -131,6 +135,49 @@ namespace GDEngine3.Screen
         }
 
         /// <summary>
+        /// Registers the given IEventReceiver object to receive events of the given type
+        /// </summary>
+        /// <param name="receiver">The event receiver to register</param>
+        /// <param name="eventType">The event type to notify the receiver of</param>
+        public void RegisterEventReceiver(IEventReceiver receiver, string eventType)
+        {
+            eventHandler.RegisterEventReceiver(receiver, eventType);
+        }
+
+        /// <summary>
+        /// Unregisters the given IEventReceiver object from receiving events of the given type
+        /// </summary>
+        /// <param name="receiver">The event receiver to unregister</param>
+        /// <param name="eventType">The event type to unregister</param>
+        public void UnregisterEventReceiver(IEventReceiver receiver, string eventType)
+        {
+            eventHandler.UnregisterEventReceiver(receiver, eventType);
+        }
+
+        /// <summary>
+        /// Unregisters the given IEventReceiver object from receiving all events it is currently registered on
+        /// </summary>
+        /// <param name="receiver">The event receiver</param>
+        public void UnregisterEventReceiverFromAllEvents(IEventReceiver receiver)
+        {
+            eventHandler.UnregisterEventReceiverFromAllEvents(receiver);
+        }
+
+        /// <summary>
+        /// Broadcasts the given GDEvent to all currently registered receivers
+        /// </summary>
+        /// <param name="gameEvent">The event to broadcast</param>
+        public void BroadcastEvent(GDEvent gameEvent)
+        {
+            eventHandler.BroadcastEvent(gameEvent);
+        }        
+
+        /// <summary>
+        /// The internal event handler for the game screen
+        /// </summary>
+        private IEventHandler eventHandler;
+
+        /// <summary>
         /// The root entity which all entities are children of
         /// </summary>
         public GDEntity Root;
@@ -143,7 +190,7 @@ namespace GDEngine3.Screen
         /// <summary>
         /// List of removed entities waiting to be cleaned
         /// </summary>
-        public List<GDEntity> Removed;
+        private List<GDEntity> Removed;
 
         /// <summary>
         /// The SpriteSortMode to use when rendering the graphics.
