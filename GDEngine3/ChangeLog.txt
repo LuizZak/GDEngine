@@ -2,7 +2,7 @@ GDEngine Version 3, A Fast XNA SceneGraph Sprite Engine
 by Luiz Fernando
 
 - Current Version -
-     * 1.0.3 *
+     * 1.1.0 *
 
 
 - Change Log -
@@ -11,6 +11,10 @@ by Luiz Fernando
 + = Addition
 - = Subtraction
 . = Note
+
+== 1.1.0
+
++ New Game Event Dispatcher feature, used to manage an uncoupled event transportartion system inside game screens
 
 == 1.0.3
 
