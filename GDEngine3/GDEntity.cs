@@ -2042,6 +2042,7 @@ namespace GDEngine3
         public GDMainEngine engine
         {
             get { return Engine; }
+            set { Engine = value; RecurseEngine(value); }
         }
 
         /// <summary>
@@ -2050,6 +2051,7 @@ namespace GDEngine3
         public GDScreen screen
         {
             get { return Screen; }
+            set { Screen = value; }
         }
 
         /// <summary>
