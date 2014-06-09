@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
 using GDEngine3.Display;
+using GDEngine3.Screen;
 using GDEngine3.Utils;
 
 using GDEngine3.Collision;
@@ -1101,6 +1102,11 @@ namespace GDEngine3
         {
             Engine = newEngine;
 
+            if(newEngine != null)
+                Screen = newEngine.CurrentScreen;
+            else
+                Screen = null;
+
             foreach (GDEntity child in Children)
             {
                 child.RecurseEngine(newEngine);
@@ -1600,6 +1606,11 @@ namespace GDEngine3
         internal GDMainEngine Engine;
 
         /// <summary>
+        /// Reference to the screen this entity is currently on
+        /// </summary>
+        internal GDScreen Screen;
+
+        /// <summary>
         /// This entitiy's parent
         /// </summary>
         protected GDEntity Parent;
@@ -2031,12 +2042,14 @@ namespace GDEngine3
         public GDMainEngine engine
         {
             get { return Engine; }
+        }
 
-            set
-            {
-                Engine = value;
-                RecurseEngine(Engine);
-            }
+        /// <summary>
+        /// Gets the screen this entity is currently on
+        /// </summary>
+        public GDScreen screen
+        {
+            get { return Screen; }
         }
 
         /// <summary>
